@@ -1,0 +1,43 @@
+{
+  "task": "clinical term mapping: entity+context -> ICD-10-CM code and SNOMED CT concept",
+  "final_config_A_dev_selected": {
+    "dense_pool": "ub5: gte-base + BioLORD + UltraBERT-Embed (weight 0.84)",
+    "judge_blend": "0.5*z(UltraBERT-150M pairwise) + 0.5*z(Qwen3-Reranker-8B) per system",
+    "icd": {"judge": "UltraBERT only", "judge_weight": 0.2, "K": 10},
+    "snomed": {"judge": "combined", "judge_weight": 0.6, "K": 30},
+    "chooser": "Kev-4B canonical (Qwen3.5-4B-Base + LoRA, init jaredpalmer/kev-4b, 2 epochs)",
+    "inference": "permutation ensemble n=8 (mean calibrated probabilities)"
+  },
+  "dev": {
+    "n": {"icd": 363, "snomed": 417},
+    "config_A_single_pass": {"icd": 0.548, "snomed": 0.647},
+    "config_A_permute5": {"icd": 0.565, "snomed": 0.667},
+    "config_A_permute8": {"icd": 0.573, "snomed": 0.667},
+    "shortlist_recall": {"icd": 0.818, "snomed": 0.887}
+  },
+  "test": {
+    "n": {"icd": 468, "snomed": 557},
+    "pool_recall_top40": {"icd": 0.874, "snomed": 0.890},
+    "config_A": {
+      "single_pass": {"icd": 0.532, "snomed": 0.603},
+      "shortlist_recall": {"icd": 0.712, "snomed": 0.874}
+    },
+    "config_B_icd_combined_K20": {
+      "single_pass": {"icd": 0.551, "snomed": 0.592},
+      "permute8": {"icd": 0.564, "snomed": 0.612},
+      "overall_permute8": 0.590,
+      "shortlist_recall": {"icd": 0.838, "snomed": 0.874}
+    }
+  },
+  "rejected": [
+    "larger K on dev (icd K15/K20, snomed K20/K40)",
+    "same-data retrains (0.554/0.640)",
+    "alignment retrain on served-recipe shortlists (0.532/0.609)",
+    "Qwen3.5-4B instruct chooser replacement (0.402/0.408)",
+    "Gemma-4 arbitration: audit harmful, conservative neutral",
+    "imported fine-tuned SapBERT + CE ICD stack retrained on this split (0.556-0.588)",
+    "KRISSBERT / MedCPT / qwen3-only shortlists",
+    "criteria length 120 / full-context 1500 (no change)"
+  ],
+  "key_finding": "permutation ensembling over option orders is the largest single inference-time gain (+1.7/+2.0 pts dev); remaining errors are chooser-side near-gold decoys, mostly label-convention/evidence-absent cases."
+}

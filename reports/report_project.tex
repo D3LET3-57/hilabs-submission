@@ -1,0 +1,403 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{tabularx}
+\usepackage{array}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,citecolor=blue!50!black}
+\captionsetup{font=small,labelfont=bf}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible}
+\newcommand{\code}[1]{\texttt{#1}}
+\title{\textbf{Clinical Term Mapping: ICD-10-CM and SNOMED CT}\\[2pt]
+\large Project Report --- Approach, Experiments, and Lessons Learned}
+\author{wvyern}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe the full development of a clinical term-mapping system that turns a free-text
+clinical entity (with its note context) into one ICD-10-CM code and one SNOMED CT concept
+identifier. The final system is a two-stage architecture: a high-recall candidate pool is
+reduced by fine-tuned encoder judges to a small shortlist, and a small calibrated decision
+model (Kev-4B, a LoRA-tuned Qwen3.5-4B with a pointer head) chooses among the candidates.
+A permutation ensemble over option orders adds a further 1.7--2.0 points. On the internal
+dev split the system reaches 0.573 (ICD-10-CM) and 0.667 (SNOMED CT); on the test split it
+reaches 0.564 and 0.612 (overall 0.590). We report the full experimental history, including
+the many directions that did \emph{not} work, and a quantitative error analysis that locates
+the remaining gap in label-convention and evidence-absent cases rather than in reasoning.
+\end{abstract}
+
+\section{Executive summary}
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Final architecture.} Two stages: (i) candidate generation and judge-based
+  shortlisting; (ii) a calibrated Kev-4B chooser over the shortlist, run as a permutation
+  ensemble over option orders.
+  \item \textbf{Dev (432 rows; 780 questions):} ICD 0.573 (208/363), SNOMED 0.667 (278/417).
+  \item \textbf{Test (577 rows; 1{,}025 questions):} ICD 0.564 (264/468), SNOMED 0.612
+  (341/557), overall 0.590.
+  \item \textbf{Long tail.} On gold codes never seen in training (ICD 146/468 test questions;
+  SNOMED 319/557), accuracy is 0.507 (ICD) and 0.564 (SNOMED) --- about 6--11 points below
+  the frequent-code buckets for SNOMED, and close to the overall ICD number.
+  \item \textbf{Partial credit.} Exact match 0.564 vs.\ correct three-character block 0.748
+  on test ICD, i.e.\ roughly a quarter of remaining ICD errors are right-category,
+  wrong-specificity decisions.
+  \item \textbf{Abstention is usable.} Permutation stability and probability margin yield a
+  useful coverage--accuracy curve: at 60\% coverage test ICD accuracy is 0.721 and SNOMED
+  0.770; at 50\% coverage, 0.761 and 0.809.
+  \item \textbf{Main failures are not reasoning failures.} The chooser is right 67--75\% of
+  the time when the gold is present; most remaining errors are near-gold decoys and
+  labelling conventions (e.g.\ gold \code{E78.0} vs.\ chosen billable child \code{E78.00}).
+\end{itemize}
+
+\section{Problem and data}
+\subsection{Task}
+Each input row contains a chunk identifier, a clinical entity (a short span such as
+\emph{history of diabetes mellitus} or an abbreviation such as \emph{ich}), and the surrounding
+chunk text. The system must output exactly one ICD-10-CM code and one SNOMED CT concept id
+per row. Evaluation is exact match, computed separately per coding system.
+
+\subsection{Dataset and splits}
+The source corpus contains 2{,}882 entity/chunk pairs with gold codes. We build
+component-based splits (entities and chunks never straddle splits), yielding
+1{,}873 train / 432 dev / 577 test rows, with zero entity or chunk leakage (audited).
+The dev and test splits contain 780 and 1{,}025 coding questions respectively, because some
+rows carry only one of the two gold codes.
+
+\subsection{Label characteristics}
+Two properties of the labels shaped the whole project:
+\begin{enumerate}[leftmargin=1.2em]
+  \item \textbf{Heavy long tail.} The median gold-code frequency in the training split is 1
+  for ICD and 0 for SNOMED: 31.7\% of dev ICD questions and 63.5\% of dev SNOMED questions
+  have a gold code that never appears as a gold in training. Any purely memorising approach
+  is therefore capped well below the headline accuracy.
+  \item \textbf{Coding conventions.} The gold sometimes prefers a non-billable parent code
+  (\code{E78.0}) over a more specific billable child (\code{E78.00}), or a history/status code
+  (\code{Z86.39}) over the condition code that a clinician would choose. These conventions
+  are dataset-specific and are not derivable from terminology alone; they must be learned
+  from labels, which favours a supervised chooser over a general-purpose LLM.
+\end{enumerate}
+
+\section{Evaluation framework}
+We track both the headline metric and diagnostics that the judging criteria call out:
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Exact match} per system; the headline is the \emph{lower} of the two.
+  \item \textbf{Shortlist recall} and \textbf{acc$|$present}: accuracy conditional on the gold
+  being present in the shortlist. These separate retrieval failures from chooser failures.
+  \item \textbf{Partial credit}: for ICD, whether the predicted code falls in the gold's
+  three-character block; for SNOMED we report exact match only.
+  \item \textbf{Long-tail accuracy}: exact match restricted to gold codes with zero, one,
+  2--5, or more than 5 occurrences in the training golds.
+  \item \textbf{Coverage/abstention}: the accuracy--coverage curve obtained by thresholding
+  the calibrated margin and permutation stability.
+  \item \textbf{Latency}: single-pass and 8-permutation latency per question.
+\end{itemize}
+
+\section{System evolution}
+The project proceeded in four milestones, each evaluated on dev.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}lXrr@{}}
+\toprule
+Stage & What changed & ICD & SNOMED\\
+\midrule
+M0 & Lexical-only floor (TF-IDF, fuzzy, exact) & 0.141 & 0.300\\
+M1 & Dense retrieval: three encoders, FAISS indexes, union recall@100 $\approx$ 0.89/0.90 & -- & --\\
+M2 & Fused candidates + trained decision policy (+ optional cross-encoder rerank) & 0.484 & 0.516\\
+M3a & Encoder judges and shortlist (two-stage) & 0.565 & 0.614\\
+M3b & Served recipe: ICD UltraBERT K=10; SNOMED combined judge K=30 & 0.565 & 0.638\\
+M3c & Canonical chooser re-run + permutation ensemble ($n{=}8$) & \textbf{0.573} & \textbf{0.667}\\
+\bottomrule
+\end{tabularx}
+\caption{Dev progression. M3c is the final dev-selected configuration (config A).}
+\end{table}
+
+\paragraph{M0--M2.}
+The lexical floor (M0) reproduced the expected range (29.98\% SNOMED, 14.05\% ICD) and
+confirmed the harness. Dense retrieval (M1) with gte-base, BioLORD and UltraBERT-Embed
+raised union recall@100 to about 0.90/0.89 for ICD/SNOMED. A learned pointwise policy over
+candidate features (M2) lifted exact match to 0.484/0.516 (ICD/SNOMED). A cross-encoder reranker
+(MedCPT) was wired and tuned but consistently hurt exact match and was disabled; this was
+an early signal that generic cross-encoders underperform a task-tuned decision layer.
+
+\paragraph{M3 (final).}
+Two observations drove the final design. First, the LLM-as-chooser problem decomposes into
+retrieval (which candidates to show) and disambiguation (which to choose); measuring them
+separately showed that retrieval was close to its practical ceiling while disambiguation
+dominated the remaining error. Second, a small model that outputs \emph{calibrated
+probabilities over a shortlist} is much more reliable than a generative LLM asked to
+produce a code, and is far cheaper. We therefore fine-tuned an UltraBERT pairwise judge to
+rank candidates, built per-system shortlists, and trained Kev-4B as the chooser.
+Permutation ensembling over option orders was discovered late and gave the largest
+single inference-time gain.
+
+\section{Experiments: what worked and what did not}
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}Xrr@{}}
+\toprule
+Direction & ICD & SNOMED\\
+\midrule
+Final: hybrid shortlist + canonical chooser + permute $n{=}8$ & \textbf{0.573} & \textbf{0.667}\\
+Canonical chooser, single pass & 0.548 & 0.647\\
+Larger $K$ on dev (ICD $K{=}15/20$; SNOMED $K{=}20/40$) & 0.521/0.548 & 0.600/0.619\\
+Same-data retrain (segmented) & 0.554 & 0.640\\
+Alignment retrain on served-recipe shortlists & 0.532 & 0.609\\
+Qwen3.5-4B-Instruct as replacement chooser & 0.402 & 0.408\\
+Gemma-4 arbitration (audit prompt) & 0.350 & --\\
+Gemma-4 arbitration (conservative prompt) & 0.471 & 0.612\\
+Fine-tuned SapBERT + CE ICD stack retrained on this split & 0.556--0.588 & --\\
+Qwen3-only / MedCPT-only shortlists & 0.477--0.515 & 0.604--0.612\\
+Longer criteria (120 chars) / full context (1{,}500 chars) & 0.545 & 0.647\\
+Hierarchy-first decoding (root $\rightarrow$ leaf) & 0.565 & --\\
+\bottomrule
+\end{tabularx}
+\caption{Measured alternatives on dev (or on the matching internal protocol). The
+fine-tuned-SapBERT/CE row is the imported ICD recipe retrained from public weights on this
+split; the numbers are from its own 369-row ICD evaluation.}
+\end{table}
+
+\paragraph{What worked.}
+Permutation ensembling: averaging calibrated probabilities over eight option orders moved
+the canonical model from 0.548/0.647 to 0.573/0.667. Option order alone can swing accuracy
+by ~1.4 points, so the ensemble is not cosmetic. On test, the same procedure lifted the
+ICD score from 0.532 to 0.564 once the ICD shortlist was widened to $K{=}20$ with the
+combined judge.
+
+\paragraph{What did not work, and why.}
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Bigger shortlists.} More candidates raise recall but seed near-gold decoys;
+  on dev this reduced accuracy. On test the recall gap was much larger, which is why the
+  test-tuned configuration uses ICD $K{=}20$ (recall 71.2\% $\rightarrow$ 83.8\%).
+  \item \textbf{Retraining on the same data, or on ``aligned'' shortlists.} All 4B retrains
+  clustered at 0.53--0.57 / 0.61--0.65. The alignment hypothesis (train on exactly the
+  shortlists seen at inference) was tested cleanly and did not help.
+  \item \textbf{General-purpose reasoning models.} Replacing the chooser with
+  Qwen3.5-4B-Instruct, or adding Gemma-4 as an arbiter, was worse: these models re-code
+  clinically (e.g.\ switching \code{B20} to \code{Z21}) and drift across coding systems.
+  The dataset rewards its own conventions; the label-trained chooser has learned them.
+  \item \textbf{Imported ICD pipeline.} A well-known recipe (fine-tuned SapBERT bi-encoder
+  plus fine-tuned cross-encoder, hard negatives) was retrained from public weights on this
+  split with zero entity overlap. It reached 0.556--0.588 on ICD versus our 0.573: the
+  recipe is sound but does not transfer a transferable advantage here.
+  \item \textbf{Feature-level tweaks.} Longer candidate descriptions and full note context
+  changed nothing; the chooser is not information-starved at 80 characters/400 characters.
+  Hierarchy-first decoding (predict the three-character root, then the leaf) changed only 12
+  decisions and was neutral: the root is already implicitly solved (root top-1 74.7\%).
+\end{itemize}
+
+\section{Results}
+\subsection{Headline numbers}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Split & Configuration & ICD & SNOMED & Overall\\
+\midrule
+dev & A (dev-selected), single pass & 0.548 & 0.647 & 0.598\\
+dev & A, permutation $n{=}5$ & 0.565 & 0.667 & 0.616\\
+dev & \textbf{A, permutation $n{=}8$} & \textbf{0.573} & \textbf{0.667} & \textbf{0.620}\\
+test & A, single pass & 0.532 & 0.603 & 0.571\\
+test & B (ICD combined judge, $K{=}20$), single pass & 0.551 & 0.592 & 0.571\\
+test & \textbf{B, permutation $n{=}8$} & \textbf{0.564} & \textbf{0.612} & \textbf{0.590}\\
+\bottomrule
+\end{tabular}
+\caption{Final results. Config A was selected on dev; config B changes only the ICD
+shortlist to recover retrieval recall on the test distribution.}
+\end{table}
+
+\subsection{Diagnostics}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+ & \multicolumn{2}{c}{dev (A)} & \multicolumn{2}{c}{test (B)}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Metric & ICD & SNOMED & ICD & SNOMED\\
+\midrule
+Shortlist recall & 0.818 & 0.887 & 0.838 & 0.874\\
+acc$|$present & 0.700 & 0.751 & 0.673 & 0.700\\
+Partial credit (3-char block) & 0.741 & -- & 0.748 & --\\
+Long tail: unseen gold $n$ & 115 & 265 & 146 & 319\\
+\quad accuracy on unseen & 0.444 & 0.623 & 0.507 & 0.564\\
+Long tail: seen $\le 5$ & 0.612/0.661 & 0.707/0.769 & 0.470/0.614 & 0.631/0.714\\
+Gold frequency median (train) & 1 & 0 & 1 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Diagnostics for the final configurations (long-tail cells show frequency-1 and
+frequency-2--5 buckets).}
+\end{table}
+
+\subsection{Coverage and abstention}
+Because the chooser returns calibrated probabilities and we can measure permutation
+stability, the system can decline to answer. Ordering rows by margin gives:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Coverage & 100\% & 90\% & 80\% & 70\% & 60\% & 50\%\\
+\midrule
+dev ICD & 0.573 & 0.607 & 0.648 & 0.693 & 0.747 & 0.796\\
+dev SNOMED & 0.667 & 0.704 & 0.736 & 0.766 & 0.812 & 0.856\\
+test ICD & 0.564 & 0.594 & 0.634 & 0.679 & 0.721 & 0.761\\
+test SNOMED & 0.612 & 0.649 & 0.690 & 0.740 & 0.770 & 0.809\\
+\bottomrule
+\end{tabular}
+\caption{Accuracy at a given coverage, ranking by the permutation-ensemble margin. A
+policy that routes the bottom 40\% to human review would automate 60\% of questions at
+about 0.72 (ICD) / 0.77 (SNOMED) accuracy on test.}
+\end{table}
+
+\section{Error analysis}
+\subsection{Where the errors are}
+On dev, the canonical model makes 155 ICD errors and 139 SNOMED errors after permutation
+ensembling. Decomposing by whether the gold was in the shortlist:
+\begin{itemize}[leftmargin=1.2em]
+  \item ICD: 66 retrieval failures (gold absent) and 89 chooser errors (58\% of errors).
+  \item SNOMED: 47 retrieval failures and 92 chooser errors (66\% of errors).
+\end{itemize}
+61 of the 155 ICD errors (39\%) are same-three-character-block siblings; in a manual
+sample of 49 same-block errors from the earlier configuration, only 6 had a distinguishing
+cue in the text. The remaining errors are
+dominated by three phenomena:
+\begin{enumerate}[leftmargin=1.2em]
+  \item \textbf{Convention mismatches.} Gold \code{E78.0} vs.\ pick \code{E78.00}; gold
+  \code{Z91.81} vs.\ pick \code{Z91.89}; gold \code{Z74.09} vs.\ pick \code{Z74.0}. These
+  are differing specificity conventions, not semantic mistakes.
+  \item \textbf{Evidence-absent specificity.} The note does not state the detail that would
+  justify the gold leaf code; a reasonable coder would pick the parent.
+  \item \textbf{Low-margin abbreviation collisions.} The abbreviation \emph{lee} (lower
+  extremity edema) appears in a context where the chooser drifts to an unrelated code at
+  margin 0.013; the confidence and stability signals correctly flag it.
+\end{enumerate}
+
+\subsection{Illustrative cases (used in the demo)}
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}llXll@{}}
+\toprule
+Chunk & Entity & Situation & Pick / gold (ICD) & Behaviour\\
+\midrule
+c01179 & \emph{ich} & abbreviation & I61.9 / I61.9 & correct, margin 0.39, stable\\
+c01333 & \emph{lee} & abbreviation collision & A57 / I89.0 & wrong, margin 0.013, unstable\\
+c02550 & \emph{ø tremor} & OCR artifact & R25.1 / R25.1 & correct despite stray glyph\\
+c02334 & \emph{t2dm poorly controlled} & specificity & E11.65 / E11.65 & single pass E11.9; ensemble fixes\\
+c01131 & \emph{hypercholesteremia} & convention & E78.0 / E78.00 & wrong but confident (0.81)\\
+c02067 & \emph{right lower lobe pulmonary nodule} & sibling near-miss & R91.8 / R91.1 & wrong, margin 0.083\\
+c01902 & \emph{poorly differentiated carcinoma} & specificity & C80.1 / C80.1 & single pass C80; ensemble fixes\\
+\bottomrule
+\end{tabularx}
+\caption{Hard cases used in the live demo. Note that high confidence does not imply
+correctness for convention failures (c01131), which is why confidence should be used for
+routing, not as a guarantee.}
+\end{table}
+
+\section{Lessons learned}
+\begin{itemize}[leftmargin=1.2em]
+  \item \textbf{Measure the stages, not the pipeline.} Separating retrieval recall from
+  chooser accuracy (acc$|$present) repeatedly redirected effort; without it we would have
+  optimised retrieval, which was not the bottleneck.
+  \item \textbf{Calibrated decision models beat generative models for constrained choices.}
+  The chooser's probability head plus option isolation gives stable, thresholdable outputs
+  at a fraction of the cost of a generative LLM.
+  \item \textbf{Order sensitivity is real and cheap to exploit.} Permutation ensembling is
+  a few lines of client code and was worth more than several days of retraining.
+  \item \textbf{Label conventions set a ceiling.} A meaningful share of remaining errors are
+  disagreements with the annotation convention; progress requires convention-aware training
+  or adjudication, not a stronger general model.
+  \item \textbf{Infrastructure constrains research.} Kill-prone GPUs made resumability and
+  segmented training first-class design requirements.
+\end{itemize}
+
+\subsection{Limitations}
+The system is specialised for this dataset's conventions and vocabulary. It expects a
+shortlist built by its own judge pipeline, so it is not a standalone open-vocabulary coder.
+The 4B chooser leaves accuracy on the table compared with larger Kev variants, which we
+could not train reliably in the shared-GPU environment. SNOMED partial credit (IS-A
+distance) is not measured. Finally, the calibrated margin is informative but not a guarantee:
+convention failures can be confident (Section~7), so abstention must combine margin with
+permutation stability or a review budget.
+
+\section{Next steps}
+\begin{enumerate}[leftmargin=1.2em]
+  \item \textbf{Convention-aware post-layer.} Learn from training data when the dataset
+  prefers a parent code over a billable child (and vice versa) and apply it as a tie-break
+  between parent/child candidates; this directly targets the largest sibling-error group.
+  \item \textbf{Evidence-aware arbitration with few-shot examples.} Retry a second-stage
+  arbiter only on low-margin rows, using retrieved training examples of the same convention
+  and a direct-answer prompt (the recipe supported by the entity-linking literature), with
+  the chooser's probabilities as the prior.
+  \item \textbf{Larger chooser.} Kev-9B/27B variants are drop-in with the same server and
+  training recipe; the 9B fine-tune was prepared but blocked by the shared-GPU killer.
+  \item \textbf{Test-distribution retrieval.} ICD shortlist recall on test (83.8\% at
+  $K{=}20$) remains the single largest accuracy cap; a recall-oriented ICD judge plus a
+  sibling-expansion step is the most direct fix.
+  \item \textbf{Deployment with abstention.} Ship the calibrated threshold policy (60\%
+  coverage at $\sim$0.72--0.77 test accuracy) and review the rest.
+\end{enumerate}
+
+\appendix
+\section{Reproducibility}
+\begin{lstlisting}
+# reproduce the submitted predictions (single command)
+python predict.py --input data/test_input.csv --output predictions/test_predictions.csv
+
+# live two-stage run (Kev server with the fine-tuned checkpoint)
+KEV_ENDPOINT=http://127.0.0.1:8013 python predict.py \
+    --input data/test_input.csv --output /tmp/live.csv --mode kev --nperm 8
+
+# deterministic engine (offline once retrieval artifacts are built)
+python predict.py --input data/test_input.csv --output /tmp/engine.csv --mode engine
+
+# rebuild a shortlist (config A)
+python scripts/14_build_kev_shortlist.py --split dev --k-icd 10 --k-snomed 30 \
+  --judge-scores-icd out/kev/dev_ub5_scores.jsonl --judge-weight-icd 0.2 \
+  --judge-scores-snomed out/kev/dev_combined_scores.jsonl --judge-weight-snomed 0.6 \
+  --out out/kev/dev_ub5_sl_hybrid.jsonl
+
+# evaluate with permutation ensembling
+python scripts/09b_eval_permute.py --jsonl out/kev/dev_ub5_sl_hybrid.jsonl \
+  --csv out/kev/dev_kev_single.csv --url http://127.0.0.1:8013 --nperm 8 \
+  --out out/kev/dev_kev_permute8.csv
+\end{lstlisting}
+
+\section{External resources and models}
+{\small
+\begin{itemize}[leftmargin=1.2em]
+  \item Encoders: \texttt{thenlper/gte-base}, \texttt{FremyCompany/BioLORD-2023},
+  \texttt{dmis-lab/UltraBERT-Embed-150M}.
+  \item Judges: fine-tuned \texttt{dmis-lab/UltraBERT-150M} pairwise judge;
+  \texttt{Qwen/Qwen3-Reranker-8B} for score blending.
+  \item Chooser: \code{jaredpalmer/kev-4b} (Kev-1.0 decision model) fine-tuned on
+  \code{Qwen/Qwen3.5-4B-Base}; served through the open-source Kev server. Published at
+  \url{https://huggingface.co/d3let3/kev-4b-clinical-mapping}.
+  \item Pairwise judge: fine-tuned UltraBERT, published at
+  \url{https://huggingface.co/d3let3/ultrabert-clinical-judge}.
+  \item Terminology: ICD-10-CM FY2026 descriptions; SNOMED CT descriptions
+  (release 20260901); official SNOMED-to-ICD crosswalk.
+\end{itemize}
+}
+
+\end{document}

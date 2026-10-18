@@ -1,0 +1,120 @@
+# Term Mapping Engine — default configuration
+# All relative paths are resolved against the repo root.
+
+terminology:
+  snomed_parquet: data/processed/snomed_desc.parquet
+  icd_parquet: data/processed/icd_desc.parquet
+  map_parquet: data/processed/map.parquet        # optional; engine degrades gracefully if absent
+  snomed_release: "20260901"
+  icd_release: "FY2026"
+  map_release: "20230901"
+
+splits:
+  path: data/processed/splits.parquet
+  train_pairs: data/processed/train_pairs.parquet
+  train_frac: 0.65
+  dev_frac: 0.15
+  test_frac: 0.20
+  seed: 17
+
+lexicon:
+  abbrev_graph: data/processed/abbrev_graph.json
+  typo_pairs: data/processed/typo_pairs.json
+  chunk_table: data/processed/chunk_table.parquet
+  train_lookup: data/processed/train_lookup.parquet
+
+candidates:
+  exact_top_k: 50
+  fuzzy_top_k: 50
+  fuzzy_min_score: 88          # rapidfuzz 0-100 token_set_ratio
+  lexical_top_k: 200
+  dense_top_k: 200
+  memory_top_k: 100
+  crosswalk_top_k: 50
+  char_ngram_top_k: 200
+
+dense:
+  index_dir: artifacts/indexes
+  embedding_dir: artifacts/embeddings
+  models:
+    - name: gte_base
+      hf_id: thenlper/gte-base
+      dim: 768
+      query_prefix: "query: "
+      passage_prefix: "passage: "
+      weight: 1.0
+    - name: biolord
+      hf_id: FremyCompany/BioLORD-2023
+      dim: 768
+      query_prefix: ""
+      passage_prefix: ""
+      weight: 1.0
+    - name: ultrabert_embed
+      hf_id: dmis-lab/UltraBERT-Embed-150M
+      dim: 768
+      query_prefix: "Instruct: Retrieve the medical code description matching the clinical concept in the patient context\nQuery: "
+      passage_prefix: ""
+      weight: 1.0
+  query_views: [entity, entity_context, normalized]
+  batch_size: 256
+
+rules:
+  enabled: true
+  policy_model_icd: artifacts/policy/icd_policy.pkl
+  policy_model_snomed: artifacts/policy/snomed_policy.pkl
+  policy_blend: 0.45          # fused vs learned probability mix (tuned on dev)
+
+fusion:
+  source_weights: {}          # per-source overrides on top of DEFAULT_SOURCE_WEIGHTS
+
+# cross-encoder reranker stage (improvement over plan doc 02 section 3 hint).
+# Off by default: dev tuning shows it hurts exact-match accuracy (see logs.md);
+# enable per-run with --rerank once calibrated.
+judge:
+  # fine-tuned encoder pairwise judge (scripts/11_train_ultrabert_judge.py)
+  enabled: false
+  model: artifacts/ultrabert_judge3
+  weight: 0.75
+  per_source_k: 20
+  top: 120
+  batch: 128
+  max_len: 256
+
+rerank:
+  enabled: false
+  model: ncbi/MedCPT-Cross-Encoder
+  top_n: 30
+  max_length: 256
+  device: auto
+  weight: 0.9                 # fusion weight of the rerank source (tuned on dev)
+  gate_margin: 0.0            # only rerank when fused top-2 margin <= this (0 = always)
+  gate_system: null           # restrict gating to one system or null for both
+
+llm:
+  base_url_env: LLM_BASE_URL
+  api_key_env: LLM_API_KEY
+  model_env: LLM_MODEL
+  timeout_env: LLM_TIMEOUT
+  max_concurrency_env: LLM_MAX_CONCURRENCY
+  default_timeout: 120
+  default_max_concurrency: 4
+  max_tokens: 2048
+  per_source_k: 10
+  temperature: 0.0
+  self_consistency_temperature: 0.3
+  self_consistency_n: 3
+  self_consistency_margin: 0.15
+  max_candidates: 20
+  prompt_version: v1
+  cache_path: artifacts/cache/llm_cache.sqlite
+  max_retries: 3
+
+output:
+  icd_dot_format: true
+  engine_version: "0.1.0"
+  provenance: true
+
+run:
+  context_window: 300
+  per_row_cache: artifacts/cache/rows.sqlite
+  batch_log_every: 100

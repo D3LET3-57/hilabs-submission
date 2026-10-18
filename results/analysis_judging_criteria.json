@@ -1,0 +1,224 @@
+{
+  "dev": {
+    "split": "dev",
+    "icd": {
+      "n": 363,
+      "acc": 0.573,
+      "long_tail": {
+        "0 (unseen)": {
+          "n": 115,
+          "acc": 0.4435
+        },
+        "1": {
+          "n": 67,
+          "acc": 0.6119
+        },
+        "2-5": {
+          "n": 124,
+          "acc": 0.6613
+        },
+        ">5": {
+          "n": 57,
+          "acc": 0.5965
+        }
+      },
+      "gold_freq_median": 1,
+      "exact": 0.573,
+      "block3": 0.741,
+      "coverage_by_margin": [
+        {
+          "coverage": 1.0,
+          "acc": 0.573
+        },
+        {
+          "coverage": 0.898,
+          "acc": 0.6074
+        },
+        {
+          "coverage": 0.799,
+          "acc": 0.6483
+        },
+        {
+          "coverage": 0.7,
+          "acc": 0.6929
+        },
+        {
+          "coverage": 0.598,
+          "acc": 0.7465
+        },
+        {
+          "coverage": 0.499,
+          "acc": 0.7956
+        }
+      ],
+      "stable": {
+        "coverage": 0.598,
+        "acc": 0.7327
+      }
+    },
+    "snomed": {
+      "n": 417,
+      "acc": 0.6667,
+      "long_tail": {
+        "0 (unseen)": {
+          "n": 265,
+          "acc": 0.6226
+        },
+        "1": {
+          "n": 58,
+          "acc": 0.7069
+        },
+        "2-5": {
+          "n": 78,
+          "acc": 0.7692
+        },
+        ">5": {
+          "n": 16,
+          "acc": 0.75
+        }
+      },
+      "gold_freq_median": 0,
+      "coverage_by_margin": [
+        {
+          "coverage": 1.0,
+          "acc": 0.6667
+        },
+        {
+          "coverage": 0.899,
+          "acc": 0.704
+        },
+        {
+          "coverage": 0.799,
+          "acc": 0.7357
+        },
+        {
+          "coverage": 0.698,
+          "acc": 0.7663
+        },
+        {
+          "coverage": 0.6,
+          "acc": 0.812
+        },
+        {
+          "coverage": 0.499,
+          "acc": 0.8558
+        }
+      ],
+      "stable": {
+        "coverage": 0.681,
+        "acc": 0.7817
+      }
+    }
+  },
+  "test": {
+    "split": "test",
+    "icd": {
+      "n": 468,
+      "acc": 0.5641,
+      "long_tail": {
+        "0 (unseen)": {
+          "n": 146,
+          "acc": 0.5068
+        },
+        "1": {
+          "n": 66,
+          "acc": 0.4697
+        },
+        "2-5": {
+          "n": 171,
+          "acc": 0.614
+        },
+        ">5": {
+          "n": 85,
+          "acc": 0.6353
+        }
+      },
+      "gold_freq_median": 2.0,
+      "exact": 0.5641,
+      "block3": 0.7479,
+      "coverage_by_margin": [
+        {
+          "coverage": 1.0,
+          "acc": 0.5641
+        },
+        {
+          "coverage": 0.9,
+          "acc": 0.5938
+        },
+        {
+          "coverage": 0.799,
+          "acc": 0.6337
+        },
+        {
+          "coverage": 0.699,
+          "acc": 0.6789
+        },
+        {
+          "coverage": 0.598,
+          "acc": 0.7214
+        },
+        {
+          "coverage": 0.5,
+          "acc": 0.7607
+        }
+      ],
+      "stable": {
+        "coverage": 0.53,
+        "acc": 0.7379
+      }
+    },
+    "snomed": {
+      "n": 557,
+      "acc": 0.6122,
+      "long_tail": {
+        "0 (unseen)": {
+          "n": 319,
+          "acc": 0.5643
+        },
+        "1": {
+          "n": 103,
+          "acc": 0.6311
+        },
+        "2-5": {
+          "n": 119,
+          "acc": 0.7143
+        },
+        ">5": {
+          "n": 16,
+          "acc": 0.6875
+        }
+      },
+      "gold_freq_median": 0,
+      "coverage_by_margin": [
+        {
+          "coverage": 1.0,
+          "acc": 0.6122
+        },
+        {
+          "coverage": 0.899,
+          "acc": 0.6487
+        },
+        {
+          "coverage": 0.799,
+          "acc": 0.6899
+        },
+        {
+          "coverage": 0.698,
+          "acc": 0.7404
+        },
+        {
+          "coverage": 0.6,
+          "acc": 0.7695
+        },
+        {
+          "coverage": 0.499,
+          "acc": 0.8094
+        }
+      ],
+      "stable": {
+        "coverage": 0.636,
+        "acc": 0.7373
+      }
+    }
+  }
+}

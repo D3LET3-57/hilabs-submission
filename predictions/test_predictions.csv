@@ -1,0 +1,578 @@
+chunk_id,clinical_entity,icd10cm_code,snomed_code
+c00007,2/2 demand ischemia,I21.A1,691471000119109
+c00738,discomfort with walking,R26.2,719232003
+c00740,"dislocation of temporomandibular joint, subsequent encounter",S03.00XD,302964004
+c00742,disorder of left commonperoneal nerve,S84.12XA,292071000119106
+c00744,distal le edema,R60.0,102572006
+c00748,distension,R14.0,41931001
+c00752,distributive shock,R57.8,27942005
+c00754,diverticulitis,K57.32,18126004
+c00755,dizziness,R42,404640003
+c00757,dizzy,R42,404640003
+c00762,dka/hyperglyc,E10.10,420422005
+c00764,dm hx gastric ulcer,Z87.11,275548000
+c00766,dm/insulin,E11.9,170747006
+c00770,dmt2,E11.37X9,3983008
+c00773,double vision,H53.2,24982008
+c00776,dphc 5n,I27.20,264361005
+c00779,drainage from eye,H04.229,246679005
+c00782,drooling,K11.7,62718007
+c00784,drowsy,R40.0,271782001
+c00786,drug overdose,T50.901A,1149222004
+c00790,drug-seeking behavior,R46.89,441668002
+c00791,dry,L74.4,11833005
+c00793,dry mouth,R68.2,87715008
+c00796,duodenal diverticulum,K57.10,762275008
+c00799,dvt bilat,I82.409,1141709008
+c00801,dvt poa,I82.409,128053003
+c00802,dvt/pe,Z86.718,128053003
+c00804,dysfunction of both eustachian tubes,H69.93,1083621000119100
+c00806,dysplasia,K31.A29,25723000
+c00809,dyspnea with activity,R06.02,60845006
+c00810,dysuria,R30.0,49650001
+c00811,e. coli,B96.20,112283007
+c00814,ectopy,Q53.00,298109001
+c00816,edema/swelling,R60.9,267038008
+c00821,eic (epidermal inclusion cyst),L72.0,418930003
+c00823,electrolyte derangements,E83.89,237840007
+c00825,elevated glucose levels,R73.9,80394007
+c00827,elevated trops,R97.2,129454009
+c00828,emesis,R11.10,422400008
+c00831,encephalitis,G04.90,45170000
+c00833,end exp wheezes,R06.2,9763007
+c00835,end-expiratory wheeze,R06.2,9763007
+c00838,endurance deficit,R53.83,248277009
+c00840,enhancement,R93.89,129351000
+c00842,enlarging skin lesion,L98.9,95324001
+c00844,epileptiform discharges,R94.01,292003
+c00846,epistaxis,R04.0,249366005
+c00848,erin,Z76.89,448281000124105
+c00851,erythema on left lower extremity,L03.116,247441003
+c00854,eschar of lower leg,L98.8,87319000
+c00857,essential hypertension,I10,59621000
+c00859,etoh abuse,F10.10,15167005
+c00863,excess fat stores,E66.9,248301008
+c00867,excessive sweating,R61,52613005
+c00870,exercise intolerance,R68.89,267044007
+c00872,exertinoal dyspnea/ fatigue,R06.09,60845006
+c00875,exposure of subchondral bone eburnation,M23.329,110453009
+c00877,extensive vascular calcification,R93.89,237897009
+c00879,extraperitoneal hemorrhage,K68.3,95549001
+c00882,extrapyramidal sx,G25.9,43378000
+c00883,extreme fatigue,R53.83,84229001
+c00885,exudate,R39.0,42142007
+c00889,face will get red,R23.2,1268301006
+c00897,facial flushing,R23.2,248213001
+c00899,failed non-operative care,Z75.8,266721009
+c00900,failure,J96.01,385671000
+c00903,"fall in (into) shower or empty bathtub, initial encounter",W18.2XXA,301512003
+c00905,fall with injury,W19.XXXA,398117008
+c00907,falling out of bed,W06.XXXA,20902002
+c00909,fast heart beats,R00.0,3424008
+c00912,fatigue with activity,R53.83,444042007
+c00913,fatigued,R53.83,84229001
+c00915,febrile,R50,386661006
+c00917,feeling sleepy,R40.0,1367959007
+c00919,fell multiple times,Z91.81,279992002
+c00921,femoral head irregularity,M24.859,280038003
+c00923,fibromyalgia,M79.7,203082005
+c00925,fibular head mobs,M25.879,22457002
+c00927,first obtuse marginal discrete 50% stenosis at the ostium of the vessel segment,I25.10,1255187002
+c00929,flail anterior mv leaflet,I34.1,251003004
+c00931,flare of sciatica,M54.30,23056005
+c00938,fluid overload,E87.70,405007002
+c00941,flushing of skin,R23.2,238810007
+c00942,focal abdominal tenderness,R10.819,297125009
+c00948,focal findings,R93.89,297122007
+c00950,focal mass,R22.9,125137004
+c00954,focal neurological deficits,R29.818,297122007
+c00956,focal tenderness,R52,89777000
+c00959,food intolerances/sensitivities,T78.19XA,235719002
+c00961,foot sores,L97.509,95345008
+c00963,foul odor,R68.89,447547000
+c00965,fracture of the right hip and right distal femur,S72.491,46401000087101
+c00969,frank trauma,T14.90XA,258136009
+c00972,frequent falling,R29.6,279992002
+c00974,frequent reflux,K21.9,235595009
+c00976,friction rub,L24.A0,7036007
+c00980,functional deficits since injury,R68.89,1360009004
+c00982,future primary osteoarthritis of left knee,M17.12,323301000119109
+c00985,gaining weight since discharge,R63.5,816159004
+c00987,gait pattern,R26.89,271705001
+c00989,gallbladder absent,Q44.0,300341002
+c00995,gastritis,K29.70,4556007
+c00998,gastroparesis,K31.84,235675006
+c01000,gdmt,Z53.09,398119006
+c01002,generalized abdominal pain,R10.84,102614006
+c01004,generalized fatigue,R53.8,84229001
+c01006,genu varum,M21.169,299331007
+c01007,gerd,K21.9,235595009
+c01011,gh isos,S46.819,366499001
+c01016,"glaucoma, narrow-angle",H40.20X0,392291006
+c01017,glenohumeral advanced arthrosis,M19.019,373623009
+c01019,glenohumeral advanced arthrosis with calcific loose body,M19.019,373623009
+c01021,glucotoxic state,R73.9,1179458001
+c01023,goc,A54.89,32290008
+c01025,grade 1 atherosclerotic disease of the ascending aorta,I70.0,81817003
+c01028,gram+ bacteremia,R78.81,491000119101
+c01030,greater than 90% long head of the biceps tendon tear,S46.199A,86128003
+c01032,grinding within the hip,M25.559,247329009
+c01034,groin tenderness,R52,301400000
+c01036,gross deformity,M95.9,417893002
+c01038,gross instability,M25.30,263922001
+c01042,groundglass opacities,R91.8,1217294009
+c01043,gtb,S72.113M,272531003
+c01047,gynecomastia,N62,4754008
+c01049,h. pylori,B96.81,80774000
+c01052,harder time with extension,M25.829,299348004
+c01054,hardware failure,T84.013A,240275002
+c01056,head injury,S09.90XA,82271004
+c01058,healthcare associated pneumonia,J18.9,425464007
+c01060,hearing loss,H91.90,15188001
+c01066,heart failure,I50.9,84114007
+c01069,heart or lung disease,I51.9,49601007
+c01071,heartburn,R12,16331000
+c01073,heavy to breathe,R06.00,267036007
+c01075,hematochezia,K62.5,405729008
+c01077,hemo myolysis,R71.8,240131006
+c01080,hemorrhoid,K64.9,70153002
+c01082,hepatic carcinoid/anemia,E34.09,1290081007
+c01084,hepatic cyst,K76.89,85057007
+c01088,hepatomegaly,R16.0,80515008
+c01091,herpes zoster,B02.9,4740000
+c01093,hfpef,I50.30,446221000
+c01095,hiatal hernia,K44.9,84089009
+c01097,high grade av block,I44.39,284941000119107
+c01099,high-grade stenosis of the left superficial femoral artery,I70.209,233969003
+c01101,his knee is pretty stiff,M25.669,321931000119102
+c01104,history of falls,Z91.81,428942009
+c01110,hit head twice,S09.90XA,248070001
+c01112,hit his head,S00.90XA,82271004
+c01114,hiv,B20,19030005
+c01118,hivicd,B20,186708007
+c01121,hot or cold,J44.9,277974003
+c01125,human immunodeficiency,B20,86406008
+c01130,hypercapnic respiratory failure,J96.92,709109004
+c01133,hyperglycemia,R73.9,80394007
+c01136,hyperlipidemia and cad,E78.5,55822004
+c01139,hyperosmolar hyperglycemic state,E13.00,310505005
+c01144,"hypertension, unspecified type",I10,38341003
+c01147,hyperthermia,R50.9,1197782006
+c01151,hypertrophied anal papillae in the anal canal,K62.0,85316008
+c01152,hypertrophy,M89.30,56246009
+c01157,hypervolemic hyponatremia,E87.1,42669007
+c01160,hypoactive bowel sounds,R19.15,15280003
+c01166,hypoglycemia symptoms,E16.2,302866003
+c01169,hypoglycemic unawareness,E11.649,170766006
+c01174,hypoxemic respiratory failure,J96.01,10676831000119101
+c01178,ica stenosis,I65.29,233964008
+c01182,illness,R69,39104002
+c01185,impaired balance,R26.81,387603000
+c01189,impaired physical strength,R53.1,26544005
+c01192,impaired sensation in feet 2/2 neuropathy,G62.9,789588003
+c01195,impending cauda equina compression,G83.4,16846261000119106
+c01199,inability to ambulate household distances,Z74.0,8510008
+c01203,inc consolidation rll,J18.9,95436008
+c01207,incontinence of bowel/bladder,R15.9,78459008
+c01209,increase rom,M25.30,298181000
+c01212,increased drainage,T81.49XA,46449008
+c01215,increased flexed posturing,M21.20,43029002
+c01218,increased o2 requirement,Z99.81,238163001
+c01221,increased right shoulder discomfort,M25.511,1260146002
+c01224,increased urination,R35.89,28442001
+c01228,increasing insulin secretion,R73.09,83649006
+c01231,induration,R23.4,34319007
+c01235,inferior hypokinesis,I51.89,38311000087105
+c01241,injured her right shoulder,S49.91XA,11780881000119107
+c01244,injury to bilateral lower extremities,S89.90XA,127279002
+c01247,intellectual disability,F79,110359009
+c01250,intentional overdose,T50.902A,1149224003
+c01253,intermittent radiation of numbness/tingling into lateral aspect of left calf,R20.2,15634841000119109
+c01256,interstitial-reticular opacities within the right lung,R91.8,128305008
+c01259,intra-articular knee joint effusion,M25.40,202381003
+c01263,iron deficiency anemia,D50.9,161456009
+c01265,irregular heartbeat,I49.9,361137007
+c01272,ischemic changes,R94.31,164862008
+c01276,issues with urination or bowel movements,R35.0,102834005
+c01280,jaundice,R17,18165001
+c01283,joint effusion,M25.451,387637008
+c01287,jvd,R09.89,37476000
+c01290,ketonuria,R82.4,274783007
+c01294,knee flex 4- 5 knee ext 3+ 5 ankle df 4+ 5,M25.669,299334004
+c01297,knee prom<br>edge of table,M21.269,299321000
+c01301,l le wound,S81.802,59091005
+c01304,l radiculopathy falls,M54.16,128196005
+c01307,l3 wedge deformity,M41.86,298589006
+c01311,l4-l5 disc bulge,M51.27,43401000087106
+c01314,laceration,S01.512A,35933005
+c01317,lack of stride height,R26.89,22325002
+c01321,large inspiratory volume,R94.2,55562005
+c01324,last modified hyperlipidemia,E78.5,55822004
+c01328,lb dressing deficit,Z89.51,704442007
+c01332,le wounds,S71.102A,210773002
+c01336,left atrium cavity is mildly dilated,I51.7,253361002
+c01339,left conjunctiva is injected,H11.432,341381000119104
+c01344,left leg dvt,I82.402,448841000124100
+c01347,left lower extremity shooting pains,M79.605,287047008
+c01350,left lumbar radiculitis,M54.16,16864831000119104
+c01353,left nasal valve collapse,J34.829,232366008
+c01356,left sided l3-4 foraminal stenosis,M99.63,371000119109
+c01358,left turbinates: enlarged,J34.3,17467004
+c01362,leg elevation,S81.809S,449695009
+c01365,leg length discrepancy + faber,M21.759,240258008
+c01370,legs feeling weak,R53.1,691011000124106
+c01373,"lesion, skin",L98.9,95324001
+c01376,ligamentum flavum thickening,M24.20,182380001
+c01379,light-headedness,R42,386705008
+c01383,limited in function,Z74.0,82971005
+c01386,limited rom,Z74.09,70733008
+c01389,liver cancer,C22.0,109841003
+c01394,lle edema,H02.845,816181009
+c01399,lof,R68.89,718860004
+c01403,loose teeth,K08.499,283021003
+c01408,lost 10 lbs,R63.4,262285001
+c01411,low blood sugar,E16.2,302866003
+c01414,low saturations,R09.02,449171008
+c01417,lower extremities are reddened,L53.9,248417003
+c01420,lower extremity problem,M79.606,724632007
+c01423,lower leg wound,S81.809A,125661005
+c01426,lumbar degenerative disc disease,M51.369,26538006
+c01429,lumbar disc disease with radiculopathypathyathyy umbilical hernia without obstruction and without gangrene,M51.16,202735001
+c01432,lumbar issues,M54.59,129139009
+c01436,lumbar radiculopathy into lle,M54.17,128196005
+c01438,lumbar spondylosis,M47.896,239880009
+c01441,lumps,R22.9,4147007
+c01445,lung sounds coarse,R06.2,47525004
+c01448,lv diastolic function indeterminate,R94.30,395704004
+c01451,lymphabs,L04.9,1415005
+c01456,m/r/g,J45.90,1156330008
+c01459,major depressive<br>disorder,F32.9,370143000
+c01462,malignancy,C80,363346000
+c01465,malignant melanoma,C43.9,372244006
+c01469,many floaters,H43.399,15013002
+c01473,max use of rle to press up,M25.359,714986002
+c01476,mediastinal adenopathy,R59.0,52324001
+c01479,medication side effects,T50.905A,408508002
+c01482,medullary thyroid cancer,C73,1332275004
+c01485,metabolic crisis,E88.9,160305008
+c01489,metastasis,C79.9,94381002
+c01494,"metastatic neuroendocrine carcinoma, unknown primary with metastatic disease to bilobar liver",C7B.00,435471000124104
+c01497,methamphetamine abuse,F15.10,27660001000004101
+c01505,mild (1+ - 2+) pulmonic valve regurgitation,I37.1,838541006
+c01509,"mild apical, apical anterior, apical anteroseptal, apical inferoseptal, apical inferior hypokinesis",I51.89,38201000087100
+c01512,mild bifacial weakness,R29.810,15749961000119105
+c01515,mild central canal stenosis,M48.061,18347007
+c01518,mild degenerative change of the knee and ankle,M17.9,396275006
+c01522,mild enlargement of la,I51.7,67741000119109
+c01525,mild facet arthropathy,M47.819,429350001
+c01528,mild global lv hypokinesis,I51.89,38301000087108
+c01531,mild hypokinesis of the apex of left ventricle,I51.89,38221000087106
+c01534,mild left atrial enlargement,I51.7,67741000119109
+c01537,mild mitral annular calcification,I34.81,251002009
+c01541,mild pulmonary hypertension,I27.20,840306007
+c01544,mild regurgitation,I35.1,838544003
+c01547,mild to mod. dementia,F03.A0,52448006
+c01551,mild varus angulation secondarily,M21.10,257756001
+c01554,mild/moderate pitting edema,R60.0,284521000
+c01557,mildly sclerotic aov,I35.8,67754003
+c01560,min gen weakness,R53.1,1137501002
+c01564,minimal respiratory distress,R06.09,271825005
+c01569,mitral valve prolapse,I34.1,409712001
+c01573,mixed response to treatment,Z92.22,399204005
+c01576,mod lv diastolic dysfunction,I50.30,395704004
+c01579,moderate (2+) mitral valve regurgitation,I34.0,838452003
+c01581,moderate distension of the right hip joint,M25.651,299232002
+c01584,moderate medial compartment degenerative changes,M21.169,396275006
+c01587,moderate obstructive sleep apnea,G47.33,16262271000119104
+c01590,moderate pulmonary hypertension,I27.20,840307003
+c01593,moderate size air-fluid level left maxillary sinus,J32.0,88348008
+c01596,moderate to severe left foraminal stenosis with mass effect on left l3 nerve root,M99.63,371000119109
+c01601,monophasic signals in left dp,R94.138,446400002
+c01604,more significant basilar inferior and basilar inferolateral hypokinesis,G45.0,38281000087107
+c01608,"motor, sensory, cerebellar deficits",R29.818,297122007
+c01610,mr,I34.0,838451005
+c01612,mrsa,B95.62,115329001
+c01616,mucusua,R09.3,63129006
+c01619,multiple closed fractures of ribs of left side,S22.42XA,10925601000119102
+c01622,multiple excoriated lesions,L98.1,247444006
+c01625,multiple round and ovoid relatively hyperdense masses,C79.9,125138009
+c01630,muscle aches,M79.10,68962001
+c01633,muscle spasms,M62.83,55300003
+c01636,muscle weakness,R53.1,26544005
+c01640,myocardial infarct,I21.9,22298006
+c01645,myotonic dystrophy,G71.09,1177122009
+c01648,"myotonic dystrophy, type 2 (hcc); familial",G71.11,1177122009
+c01651,n/v/d/c/c/s,R63.8,162111008
+c01654,nasacort allergy 24hr,J30.9,294700000
+c01657,nasal discharge,R09.81,64531003
+c01663,nasal problems,J34.9,301199001
+c01666,nasal valve obstruction,J34.829,16860001000004106
+c01670,nausea and/or vomiting,R11.10,16932000
+c01672,nauseated,R11.0,422587007
+c01675,nebu,A66.9,385198000
+c01678,neck stiffness,M54.2,161882006
+c01681,necrotic appearing enlarged supraclavicular lymph nodes,R59.0,94614009
+c01684,negative aspiration,Y84.4,442703001
+c01689,nerve damage,G62.9,57182000
+c01692,nerve sx,R29.818,16269008
+c01695,neuroendocrine carcinoma (hcc),C7B.02,253000007
+c01698,neurologic changes,R29.90,170694008
+c01700,neuropathy,G62.9,386033004
+c01704,new onset arrhythmia,I49.9,698247007
+c01707,nicotine dependence,F17.210,56294008
+c01709,night sweats,R61,42984000
+c01713,nocturnal awakening,G47.00,423052008
+c01716,non healing wounds,T81.30XA,125192008
+c01719,non-obstructive disease,R69,39886000
+c01722,non-st elevated myocardial infarction,I21.4,401314000
+c01725,noncompliance with cpap,Z91.199,7058009
+c01728,nonpitting edema,R60.9,420435001
+c01731,nonspecific st abnormality,R94.31,428750005
+c01734,nonsustained ventricular tachycardia,I47.29,444658006
+c01737,noswelling,R50.9,442672001
+c01740,np 75% femoral stenosis,I70.209,233969003
+c01743,numbe,R52,405161002
+c01747,numbness to the foot,R20.0,309538000
+c01748,numbness/tingling,R20.2,91019004
+c01753,obese,E66.9,414916001
+c01757,obriens,F48.8,1231539004
+c01760,obstructive uropathy,N13.9,86249007
+c01766,old surgical scar to mid chest,L90.5,63130001
+c01769,ongoing hyperglycemia,R73.9,80394007
+c01772,"open wound of left knee, leg, and ankle, initial encounter",S81.002A,49461000087107
+c01775,opioid overdose,F11.929,242253008
+c01780,oral ulcers,K12.30,26284000
+c01785,osteoarthritis,M19.90,396275006
+c01786,osteoarthritis of left knee,M17.12,323301000119109
+c01791,osteophytes,M25.70,88998003
+c01793,osteoporosis,M81.0,64859006
+c01798,other block,I44.30,56333001
+c01801,other iron deficiency anemia,D50.8,49211000087106
+c01805,other wound left;anterior,S91.105A,10958081000119105
+c01807,other wound right;left;inner groin,S31.8,283265002
+c01811,overlying skin is warm to the touch,R23.8,102599008
+c01814,pa-c,I27.81,471431000124102
+c01817,pad/claudication,I70.219,840580004
+c01821,painful range of motion,R52,247374002
+c01823,painless passive hip range of motion,M25.659,229527008
+c01826,palpable nodularities,R59.0,264871003
+c01830,paradoxical septal motion,I44.60,449543008
+c01833,parasomnias,G47.50,58690002
+c01836,paravertebral tenderness,M54.51,301399007
+c01841,partial right femoral head collapse/avascular necrosis,M87.851,203476003
+c01844,patella alta or baja,M22.8X9,866246001
+c01847,peaked t waves,R94.31,251238007
+c01850,penicillin allergy,Z88.0,91936005
+c01853,perianal symptoms,R10.20,397174009
+c01856,pericardial or pleural effusion,J90,373945007
+c01859,peripheral pulses bounding,R09.89,271640005
+c01862,perseverates on his ex gf,K31.6,67698009
+c01865,petechia,R23.3,271813007
+c01868,pharyngitis,J02.9,405737000
+c01871,physical deconditioning,R53.81,31031000119102
+c01876,pleural effusion,J90,60046008
+c01880,pna,J15.9,233604007
+c01885,poison ivy dermatitis,L23.7,410049000
+c01890,polysubstance abuse,F19.99,445273005
+c01892,poor airflow,R06.8,60466007
+c01896,poor cooperation,R27.8,248042003
+c01899,poor po intake,Z59.48,440321000124101
+c01903,poorly differentiated carcinoma of unknown primary,C80.0,38549000
+c01905,possible obesity,E66.9,414916001
+c01908,post prandial emesis,R11.10,422400008
+c01911,posterior dislocation,S43.026A,125172001
+c01914,postural dizziness,R42,103017008
+c01917,pre dm,R73.03,714628002
+c01920,pre-dm/dm,E11.9,73211009
+c01923,prediabetes,R73.03,714628002
+c01926,prerenal,N17.9,129561000119108
+c01927,pressure,R52,276435006
+c01929,pressure injury,L89.9,1163214006
+c01936,prexisting or high potential for compromised skin integrity,R23.8,70693003
+c01939,primary iga nephropathy,N02.B9,236407003
+c01944,primary osteoarthritis of left kneey osteoarthritis of left knee,M17.12,323301000119109
+c01945,"primary osteoarthritis of one hip, right",M16.11,323311000119107
+c01949,probable high-grade stenosis of the left popliteal artery,I70.292,307316006
+c01952,productive cough,R05.8,28743005
+c01955,profound weakness of the supraspinatus tendon,M75.100,399346004
+c01959,prolapse of the anterior leaflet of the mitral valve,I34.89,276795005
+c01962,prolonged bleeding,R58,123789000
+c01965,prominent interstitial markings,R93.1,83464003
+c01969,proximal-predominant limb weakness,R53.1,249939004
+c01972,psychiatric _extrapyramidal,G25.9,43378000
+c01975,ptosis,H02.409,11934000
+c01979,pubic symphysis and visualized lower lumbar spine,M19.90,396275006
+c01982,pulmonary disease,J98.9,19829001
+c01985,pulmonary embolus,I26.99,59282003
+c01988,pulmonary masses,R91.8,309529002
+c01991,pulmonic stenosis,I37.0,56786000
+c01994,pus,L03.90,11311000
+c01999,r bend: mildly reduced and mildly painful,R52,298627004
+c02000,r le is numb from knee to foot,G57.91,15634791000119106
+c02003,radiculopathy,M54.10,72274001
+c02006,rare isolated pacs,I49.9,284470004
+c02009,rash on the right lower flank,R21,271807003
+c02012,rebound,R10.829,262001002
+c02015,recurrent falls,Z91.81,279992002
+c02019,red spot at the back of the left lower leg,R22.42,10680791000119100
+c02021,redness on left arm,R21,444827008
+c02024,reduced po intake,R63.8,440321000124101
+c02027,regional wall motion abnormalities,R94.30,429750003
+c02030,renal dysfunction,N17.9,236433006
+c02033,requires rest breaks,R26.81,77427003
+c02036,resolving pneumonia,J18.9,233604007
+c02039,respecxtively abnormal ecg,R94.31,102594003
+c02042,respiratory distress,R06.03,271825005
+c02045,restricted rom,Z74.09,225317005
+c02050,rhinorrhea is purulent,R09.81,14310000
+c02054,rhythm irregular,I49.9,361137007
+c02057,right foot numbness,R20.8,309538000
+c02060,right hip discomfort,M25.551,316921000119102
+c02063,right leg issues,M79.604,451421000124102
+c02066,right lower extremity symptoms,M79.604,62175007
+c02069,right middle lobe and basilar atelectatic changes,J98.11,86587003
+c02072,"right shoulder pain, unspecified chronicity",M25.511,1260146002
+c02075,right ue dysfunction,M75.91,320031000119109
+c02078,right ventricle is moderately dilated,I51.7,253522006
+c02081,right-hand dominant,M21.941,299721003
+c02086,rotation internal,M25.819,12852001
+c02089,round rash on right thigh,R21,846742005
+c02092,rsv asthma exacerbation,J45.901,281239006
+c02097,rtka,V89.2,184251008
+c02100,rv dysfunction,I50.810,473365008
+c02103,rv function is worse,I50.810,473365008
+c02106,s/p fall hitting her head,S09.90XA,82271004
+c02109,sacral decubitus,L89.150,225562005
+c02112,sb left,M25.50,287047008
+c02115,scabbing,R45.6,409589004
+c02118,scant;serosanguinous,R09.1,734132004
+c02119,scar,L90.5,275322007
+c02124,schizoaffective disorder,F25.9,68890003
+c02127,scleral injection bilaterally,H15.103,246980005
+c02129,scoliosis,M41.9,298382003
+c02134,secondary malignant carcinoid tumor of liver (hcc),C7B.02,94381002
+c02138,seizures,G40.909,91175000
+c02141,sensory change,R20.9,247322000
+c02144,serious bleeding from the stomach or bowels,K92.2,74474003
+c02147,serosanguinous,R18.8,734132004
+c02150,severe concentric left ventricular hypertrophy,I42.2,840305006
+c02153,severe degenerative change of the right hip,M16.11,323311000119107
+c02156,severe dysfunction,M99.09,40226000
+c02159,severe left neural foraminal narrowing at l4-5,M99.33,764273002
+c02162,severe nausea,R11.0,422587007
+c02165,severe osa,G47.33,16262171000119105
+c02168,severe regurgitation of the mitral valve,I34.0,838453008
+c02170,severe rsv,J12.1,55735004
+c02174,severely constipated,K59.00,14760008
+c02177,shingles,B02.9,4740000
+c02182,short right forearm,M21.931,249741009
+c02183,short<br>stride,R26.89,22325002
+c02185,shortness of breath at rest,R06.02,161941007
+c02191,side effects,T88.7XXS,62014003
+c02195,significant aortoiliac disease,I70.0,233956002
+c02198,"significant difficulty with 8"" stairs",R26.89,282195009
+c02201,significant spinal canal or neural foraminal stenosis,M48.00,76107001
+c02204,sinus allergy,J30.9,897656009
+c02208,skin cancer,C44.90,372130007
+c02211,skin issues,L98.9,297982009
+c02214,skin rashes,R21,290000000
+c02217,sleep deprivation,F51.12,130989002
+c02221,sleeping poorly,G47.00,44186003
+c02225,slight numbness of right foot,R20.8,309538000
+c02228,slow or shallow breathing,R06.8,386614005
+c02232,slurred speech,R47.81,289195008
+c02234,small dlcx,I73.9,1255258007
+c02237,small hepatic cyst,K76.89,85057007
+c02240,small to moderate suprapatellar effusion,M25.469,387637008
+c02244,sob with minimal exertion,R06.02,161940008
+c02248,soreness at the knee,M25.569,1003722009
+c02251,spasming,R25.2,196754001
+c02254,speech change,R47.89,23168003
+c02258,spinal stenosis _lumbar spine,M48.061,18347007
+c02260,splenomegaly,R16.1,16294009
+c02263,sprain,S93.409,384709000
+c02266,st segment elevations,R00.0,76388001
+c02272,stage 3 ckd,N18.30,433144002
+c02275,stage iii avn,M12.259,397758007
+c02278,status migrainosus,G43.911,230467008
+c02281,step<br>through pattern,R26.89,22325002
+c02282,stiff,M25.662,84445001
+c02289,strep throat,J03.00,92971000087109
+c02293,subacute bacterial endocarditis,I33.9,73774007
+c02296,subchondral fracture,S72.064A,316885008
+c02299,suboptimal diabetes control,E11.65,237622006
+c02305,subtle seizure,G40.909,1155717003
+c02307,sudden loss of vision,H53.139,15203004
+c02311,supraspinatus tendon was torn,M75.100,399346004
+c02314,suspicious axillary adenopathy,R59.0,127189005
+c02317,suspicious marrow lesion,R89.9,52988006
+c02322,swollen nodes,R59.9,30746006
+c02324,synovial hypertrophy,M67.20,240206002
+c02329,systolic heart failure,I50.20,417996009
+c02332,t-wave inversions,R94.31,59931005
+c02335,tachypnea,R06.82,271823003
+c02338,tbd,Z91.199,390840006
+c02341,tears,R68.11,428220001
+c02343,tender,R52,300820003
+c02347,the left lower extremity is red and very tender to palpation,R22.42,301423002
+c02350,the right ventricle is moderately dilated,I51.7,253522006
+c02353,thick nasal skin,L71.1,271815000
+c02356,threw self into traffic,X81.0XXA,214031005
+c02359,thrombophilia,D68.59,234467004
+c02362,tia,G45.9,266257000
+c02368,tingling weakness down the arm,R53.1,95673003
+c02371,tiny rpl1-3,D46.1,262445005
+c02375,"tissue injury due to external forces of pressure, friction",L89.9,1163214006
+c02380,tobacco abuse disorder,F17.210,1345156008
+c02383,toenails not to growth,L60.3,247482003
+c02386,torn meniscus,S83.209A,397529006
+c02390,toxic encephalopathy in setting of polysubstance abuse,G92.9,28394000
+c02392,trace bl triceps,R29.2,299825004
+c02395,trace edema,R60.9,267038008
+c02398,trace rle edema,R60.9,816183007
+c02403,traumatic complete tear of left rotator cuff,M75.122,11779121000119103
+c02405,tricompartmental osteoarthritis,M17.9,239873007
+c02408,trivial central mr,I34.0,838451005
+c02411,ttp over greater trochanter / trochanteric bursa,S72.126S,323031000119100
+c02414,two right lung parenchymal masses,R91.8,309529002
+c02416,type 2 diabetes,E11.9,44054006
+c02419,type 2 diabetes mellitus with hyperglycemia,E11.65,368051000119109
+c02426,"type 2 diabetes mellitus without complication, unspecified whether long term insulin use",E11.9,44054006
+c02429,type ii or unspecified type diabetes mellitus,E11.9,44054006
+c02433,ulcerations,L98.499,263913002
+c02435,umbilical hernia without obstruction and without,K42.9,396347007
+c02439,unable to weaned from o2,Z99.81,931000119107
+c02442,uncontrolled t2dm interval events,E11.9,443694000
+c02445,underlying sleep apnea,G47.30,73430006
+c02448,unexplained fever,R50,7520000
+c02451,unspecified vitamin d deficiency,E55.9,34713006
+c02452,unsteady,R26.81,267084003
+c02457,unusual sweating,R61,52613005
+c02460,upper pole left renal cyst,N28.1,722223000
+c02463,"upper respiratory tract infection, unspecified type",J06.9,54150009
+c02467,uri,J06.9,54150009
+c02471,urinary tract or bph symptoms,R39.89,307541003
+c02474,"uterine leiomyoma, unspecified location",D25.9,95315005
+c02477,vad,Z95.811,360064003
+c02480,valvular abnormalities,I08,368009
+c02483,vas bilateral venous,I83.93,111293003
+c02486,venous thromboembolic disease,Z86.71,428904003
+c02489,very small masses,R91.8,272418005
+c02492,viral pneumonia,J12.9,75570004
+c02495,visual blurring,H53.8,111516008
+c02498,visual field cut,H53.439,12184005
+c02501,visually significant cataract affecting activities of daily living,H26.9,193570009
+c02506,vt storm (monomorphic),I47.20,251158004
+c02507,waking up in the middle of the night,G47.00,713822005
+c02510,wbing discomfort,R52,247347003
+c02513,weak immune system,D84.9,370388006
+c02516,weakness in the s1 dermatome,R53.1,244059004
+c02519,weight loss of 13 lbs,R63.4,262285001
+c02526,without eyes opening,H52.521,45169001
+c02529,worsening cough,R05.9,49727002
+c02532,worsening renal function,N17.9,314983004
+c02535,worst wound,S81.809,13924000
+c02539,wound healing problems,T81.30XA,271618001
+c02541,wound to left leg,S81.802A,49461000087107
+c02544,wounds,T14.90XA,13924000
+c02548,yellowing of eye or skin,R17,18165001
